@@ -1,20 +1,31 @@
+import os
 import random
 import sys
 import time
 
 import pygame
 
-from game_global import Global
+from core.logic.start import start_logic
+from .game_global import Global, init_surface_pool
 
 
 class Game:
     def __init__(self):
         g = Global()
+
         # 初始化pygame
         pygame.init()
         pygame.display.set_caption('魔塔Online')
-        g.g_screen = pygame.display.set_mode([800, 600])
-        g.g_font = pygame.font.SysFont("fangsong", 24)
+
+        # 初始化全局变量
+        g.screen = pygame.display.set_mode([800, 600])
+        g.font = pygame.font.SysFont('fangsong', 24)
+        g.scene = 0
+        g.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        g.host = 'http://127.0.0.1:8000'
+        g.auth = '666666'
+        init_surface_pool()
+
         # 初始化随机种子
         random.seed(int(time.time()))
 
@@ -41,7 +52,10 @@ class Game:
         # 事件处理
         self.handler_event()
 
-        pass
+        # 逻辑处理
+        g = Global()
+        if g.scene == 0:  # 登录场景
+            start_logic()
 
     def update_view(self):
         """
