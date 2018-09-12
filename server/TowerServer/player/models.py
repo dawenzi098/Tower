@@ -13,3 +13,10 @@ class Player(models.Model):
     coin = models.PositiveIntegerField(null=False, default=0, verbose_name="金币")
 
     post_date = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
+
+    def __str__(self):
+        return self.nickname
+
+    class Meta:
+        verbose_name = "玩家"
+        verbose_name_plural = verbose_name

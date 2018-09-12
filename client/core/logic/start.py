@@ -10,7 +10,7 @@ from core.game_global import Global
 
 
 def start_logic():
-    # 先调用一次渲染（由于后面会阻塞线程，所以先渲染，所以视图更新中也不用处理scene=0的情况了）
+    # 先调用一次渲染（由于后面input会阻塞线程，所以要先渲染，视图更新中也不用处理scene=0的情况了）
     g = Global()
     g.screen.blit(g.surface_pool[0], [0, 0])  # 画背景图
     pygame.display.flip()
