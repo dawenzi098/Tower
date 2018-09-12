@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from Tower.server.TowerServer.player.models import Player
+from player.models import Player
 
 
-class RegisterSrlz(serializers.ModelSerializer):
-
+class PlayerSrlz(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ('',)
+        fields = ('nickname', 'hp', 'atk', 'defense', 'coin')

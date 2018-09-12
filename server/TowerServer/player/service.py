@@ -1,3 +1,11 @@
+from player.models import UserToken
+
+
+def get_token_of_user(user):
+    token, created = UserToken.objects.get_or_create(user=user)
+    return token.key
+
+
 def init_player(player):
     """
     初始化玩家属性

@@ -7,6 +7,7 @@ import pygame
 
 from core.common import post_data
 from core.game_global import Global
+from core.models import Player
 
 
 def start_logic():
@@ -23,7 +24,23 @@ def start_logic():
             """
         )
         if cmd == '1':
-            break
+            username = input("请输入帐号(1/2)：")
+            password = input("请输入密码(2/2)：")
+            data = {'username': username, 'password': password}
+            res = post_data('/player/login/', data)
+            if res.status_code == 200:
+                py_obj = json.loads(res.text)
+                g.auth = py_obj['token']
+                # 初始化玩家属性
+                g.player = Player(nickname=py_obj['player']['nickname'], hp=py_obj['player']['hp'],
+                                  atk=py_obj['player']['atk'], defense=py_obj['player']['atk'],
+                                  coin=py_obj['player']['coin'])
+                print(g.player.__dict__)
+                break
+            else:
+                py_obj = json.loads(res.text)
+                print('登录失败：', py_obj['msg'])
+
         elif cmd == '2':
             username = input("请输入帐号(1/4)：")
             password = input("请输入密码(2/4)：")

@@ -11,6 +11,8 @@ class Global:
     scene：当前场景值   0：登录或注册场景
     base_dir：项目根目录绝对路径
     surface_pool：表面池（列表），一次性加载所有图片
+    auth：登录认证令牌
+    player：玩家对象
     """
     __instance = None
 

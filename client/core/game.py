@@ -24,7 +24,7 @@ class Game:
         g.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         g.host = 'http://127.0.0.1:8000'
         g.auth = '666666'
-        init_surface_pool()
+        init_surface_pool()  # 加载全部图片（一共也没几张图，占不了多少内存）
 
         # 初始化随机种子
         random.seed(int(time.time()))
