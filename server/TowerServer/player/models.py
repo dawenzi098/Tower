@@ -11,3 +11,5 @@ class Player(models.Model):
     atk = models.PositiveIntegerField(null=False, default=0, verbose_name="攻击力")
     defense = models.PositiveIntegerField(null=False, default=0, verbose_name="防御力")
     coin = models.PositiveIntegerField(null=False, default=0, verbose_name="金币")
+
+    post_date = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
