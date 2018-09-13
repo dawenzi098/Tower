@@ -37,9 +37,31 @@ def init_surface_pool():
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/start.jpg')))
     # 1:加载遮罩图片
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/fade.png')).convert())
+    # 2:加载地板图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/floor.png')).convert_alpha())
+    # 3:加载墙图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/wall.png')).convert_alpha())
+    # 4:加载宝石图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/gem.png')).convert_alpha())
+    # 5:加载门图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/door.png')).convert_alpha())
+    # 6:加载钥匙图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/key.png')).convert_alpha())
+    # 7:加载主角图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/role.png')).convert_alpha())
+    # 8:加载怪物图片
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/monster.png')).convert_alpha())
+    # 9:加载攻击动画
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/ani-atk.png')).convert_alpha())
+    # 10:加载传送动画
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/ani-tp.png')).convert_alpha())
 
 
 class Fade:
+    """
+    淡出淡入
+    """
+
     def __init__(self, callback=None):
         self.sw = False  # 开关，是否启动淡入淡出
         self.callback = callback  # 回调函数

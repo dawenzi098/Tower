@@ -5,3 +5,9 @@ class Player:
         self.atk = atk
         self.defense = defense
         self.coin = coin
+
+
+
+class Map:
+    def __init__(self):
+        pass

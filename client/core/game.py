@@ -53,11 +53,10 @@ class Game:
         # 事件处理
         self.handler_event()
 
-        # 逻辑处理
-
         # 全局逻辑
         Global.g().fade.logic()  # 淡入淡出
 
+        # 场景逻辑
         if Global.g().scene == 0:  # 登录场景
             start_logic()
 
