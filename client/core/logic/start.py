@@ -35,7 +35,10 @@ def start_logic():
                 g.player = Player(nickname=py_obj['player']['nickname'], hp=py_obj['player']['hp'],
                                   atk=py_obj['player']['atk'], defense=py_obj['player']['atk'],
                                   coin=py_obj['player']['coin'])
-                print(g.player.__dict__)
+                Global.g().scene = 1
+                Global.g().fade.reset()
+                Global.g().fade.sw = True
+                print("跳出循环")
                 break
             else:
                 py_obj = json.loads(res.text)

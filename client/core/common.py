@@ -20,3 +20,4 @@ def post_data(url, dict_data):
     j_str = json.dumps(dict_data)
     return requests.post(g.host + url, data=j_str,
                          headers={'Authorization': g.auth, 'content-type': 'application/json'})
+

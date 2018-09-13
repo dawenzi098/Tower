@@ -6,7 +6,7 @@ import time
 import pygame
 
 from core.logic.start import start_logic
-from .game_global import Global, init_surface_pool
+from .game_global import Global, init_surface_pool, Fade
 
 
 class Game:
@@ -25,6 +25,7 @@ class Game:
         g.host = 'http://127.0.0.1:8000'
         g.auth = '666666'
         init_surface_pool()  # 加载全部图片（一共也没几张图，占不了多少内存）
+        g.fade = Fade()
 
         # 初始化随机种子
         random.seed(int(time.time()))
@@ -53,15 +54,25 @@ class Game:
         self.handler_event()
 
         # 逻辑处理
-        g = Global()
-        if g.scene == 0:  # 登录场景
+
+        # 全局逻辑
+        Global.g().fade.logic()  # 淡入淡出
+
+        if Global.g().scene == 0:  # 登录场景
             start_logic()
 
     def update_view(self):
         """
         游戏视图更新
         """
-        pass
+
+        if Global.g().scene == 1:
+            Global.g().screen.blit(Global.g().surface_pool[0], [0, 0])  # 画背景图
+
+        # 全局视图更新
+        Global.g().fade.draw()
+
+        pygame.display.flip()
 
     def handler_event(self):
         """
