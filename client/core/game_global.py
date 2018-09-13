@@ -103,3 +103,36 @@ class Fade:
         self.alpha = 0
         self.surface = Global.g().surface_pool[1]
         self.surface.set_alpha(self.alpha)
+
+
+class BasePanel:
+    """
+    基本面板
+    """
+
+    def __init__(self, x, y, w, h):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+    def mouse_down(self, x, y):
+        pass
+
+    def mouse_up(self, x, y):
+        pass
+
+    def mouse_move(self, x, y):
+        pass
+
+    def mouse_in_panel(self, x, y):
+        # 计算相对坐标
+        dx, dy = self.get_dxy(x, y)
+
+        return 0 < dx < self.w and 0 < dy < self.h
+
+    def get_dxy(self, x, y):
+        # 计算相对坐标
+        dx = x - self.x
+        dy = y - self.y
+        return dx, dy

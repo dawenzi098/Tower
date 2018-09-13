@@ -35,10 +35,10 @@ def start_logic():
                 g.player = Player(nickname=py_obj['player']['nickname'], hp=py_obj['player']['hp'],
                                   atk=py_obj['player']['atk'], defense=py_obj['player']['atk'],
                                   coin=py_obj['player']['coin'])
-                #进入游戏
+                # 进入游戏
                 Global.g().scene = 1
-                Global.g().fade.reset()
-                Global.g().fade.sw = True
+                # Global.g().fade.reset()
+                # Global.g().fade.sw = True
                 break
             else:
                 py_obj = json.loads(res.text)
