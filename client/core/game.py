@@ -57,6 +57,9 @@ class Game:
         # 场景逻辑
         if Global.g().scene == 0:  # 登录场景
             start_logic()
+        elif Global.g().scene == 1:
+            from core.logic import edit_map
+            edit_map.logic()
 
     def update_view(self):
         """
