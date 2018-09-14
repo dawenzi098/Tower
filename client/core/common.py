@@ -31,11 +31,11 @@ class Array2D:
             4.数组的默认值都是0
     """
 
-    def __init__(self, w, h):
+    def __init__(self, w, h, default=0):
         self.w = w
         self.h = h
         self.data = []
-        self.data = [[0 for y in range(h)] for x in range(w)]
+        self.data = [[default for y in range(h)] for x in range(w)]
 
     def showArray2D(self):
         for y in range(self.h):

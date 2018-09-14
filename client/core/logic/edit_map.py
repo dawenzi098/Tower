@@ -20,7 +20,7 @@ class Panel(BasePanel):
     def __init__(self, t, x, y, w, h):
         super().__init__(x, y, w, h)
         self.focus = -1
-        self.t = t  # 类型    0：地板    1：墙
+        self.t = t  # 类型    0：地板    1：墙     2：宝石    3：门
 
     def mouse_move(self, x, y):
         if not self.mouse_in_panel(x, y):
@@ -30,16 +30,16 @@ class Panel(BasePanel):
         self.focus = dx // 32 + dy // 32 * 4
 
     def mouse_down(self, x, y):
+
         if not self.mouse_in_panel(x, y):
             self.focus = -1  # 鼠标不在面板范围内
             return
 
         global current_tile
-        if self.t == 0:  # 地板面板
-            current_tile = self.focus + 1000
-        elif self.t == 1:  # 墙面板
-            current_tile = self.focus + 2000
-        print(current_tile)
+        """
+        1000地板 2000墙 3000宝石 4000门
+        """
+        current_tile = self.focus + (self.t + 1) * 1000
 
     def draw_focus(self):
         x = self.x + (self.focus % 4) * 32
@@ -49,10 +49,7 @@ class Panel(BasePanel):
 
     def draw(self):
         # 画图块
-        if self.t == 0:
-            g.screen.blit(g.surface_pool[2], (self.x, self.y))
-        elif self.t == 1:
-            g.screen.blit(g.surface_pool[3], (self.x, self.y))
+        g.screen.blit(g.surface_pool[self.t + 2], (self.x, self.y), (0, 0, self.w, self.h))
 
         # 画焦点线框
         self.draw_focus()
@@ -82,7 +79,7 @@ class MapPanel(BasePanel):
         # dx, dy = self.get_dxy(x, y)
         if 1000 <= current_tile < 2000:
             current_map.bottom[current_map.current_level][self.index_x][self.index_y] = current_tile
-        elif 2000 <= current_tile < 3000:
+        elif 2000 <= current_tile < 5000:
             current_map.top[current_map.current_level][self.index_x][self.index_y] = current_tile
 
     def draw_focus(self):
@@ -99,9 +96,10 @@ class MapPanel(BasePanel):
                 if 1000 <= btm_tile_val < 2000:  # 画底层
                     g.screen.blit(g.surface_pool[2], (self.x + x * 32, self.y + y * 32),
                                   ((btm_tile_val - 1000) % 4 * 32, (btm_tile_val - 1000) // 4 * 32, 32, 32))
-                if 2000 <= top_tile_val < 3000:  # 画墙
-                    g.screen.blit(g.surface_pool[3], (self.x + x * 32, self.y + y * 32),
-                                  ((top_tile_val - 2000) % 4 * 32, (top_tile_val - 2000) // 4 * 32, 32, 32))
+                if 2000 <= top_tile_val < 5000:  # 画墙、宝石、门
+                    g.screen.blit(g.surface_pool[top_tile_val // 1000 + 1], (self.x + x * 32, self.y + y * 32),
+                                  ((top_tile_val - top_tile_val // 1000 * 1000) % 4 * 32,
+                                   (top_tile_val - top_tile_val // 1000 * 1000) // 4 * 32, 32, 32))
 
         # 画焦点线框
         self.draw_focus()
@@ -109,8 +107,12 @@ class MapPanel(BasePanel):
 
 # 创建地板面板
 floor_panel = Panel(0, 500, 0, 128, 64)
-# 创建墙
+# 创建墙面板
 wall_panel = Panel(1, 500, 100, 128, 32)
+# 创建宝石面板
+gem_panel = Panel(2, 650, 0, 128, 128)
+# 创建门面板
+door_panel = Panel(3, 650, 150, 128, 32)
 
 # 创建地图面板
 map_panel = MapPanel()
@@ -118,16 +120,19 @@ map_panel = MapPanel()
 
 def event_handler(event):
     """事件处理"""
-    if event.type == pygame.MOUSEMOTION:
-        x, y = pygame.mouse.get_pos()
+    x, y = pygame.mouse.get_pos()
+    if event.type == pygame.MOUSEMOTION:  # 鼠标移动
         floor_panel.mouse_move(x, y)
         wall_panel.mouse_move(x, y)
         map_panel.mouse_move(x, y)
-    elif event.type == pygame.MOUSEBUTTONDOWN:
-        x, y = pygame.mouse.get_pos()
+        gem_panel.mouse_move(x, y)
+        door_panel.mouse_move(x, y)
+    elif event.type == pygame.MOUSEBUTTONDOWN:  # 鼠标按下
         floor_panel.mouse_down(x, y)
         wall_panel.mouse_down(x, y)
         map_panel.mouse_down(x, y)
+        gem_panel.mouse_down(x, y)
+        door_panel.mouse_down(x, y)
 
 
 def logic():
@@ -142,16 +147,15 @@ def draw():
     """
     g.screen.fill(Color(100, 100, 100))
 
-    # 绘制地板图块
+    # 绘制地板面板
     floor_panel.draw()
     # 绘制墙面板
     wall_panel.draw()
-    # 绘制墙图块
-    # g.screen.blit(g.surface_pool[3], (500, 100))
     # 绘制宝石图块
-    g.screen.blit(g.surface_pool[4], (650, 0))
+    gem_panel.draw()
     # 绘制门图块
-    g.screen.blit(g.surface_pool[5], (650, 150), (0, 0, 128, 32))
+    door_panel.draw()
+    # g.screen.blit(g.surface_pool[5], (650, 150), (0, 0, 128, 32))
     # 绘制钥匙图块
     g.screen.blit(g.surface_pool[6], (650, 200), (0, 0, 128, 32))
     # TODO:绘制怪物图块

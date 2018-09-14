@@ -20,5 +20,5 @@ class Map:
         self.level = level  # 一共多少层（从1开始计数）
         self.current_level = 0  # 当前层（从0开始计数）
         # 初始化所有层
-        self.bottom = [Array2D(13, 13) for i in range(self.level)]  # 底层
+        self.bottom = [Array2D(13, 13, 1000) for i in range(self.level)]  # 底层
         self.top = [Array2D(13, 13) for i in range(self.level)]  # 顶层
