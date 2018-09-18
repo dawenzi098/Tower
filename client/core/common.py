@@ -1,4 +1,6 @@
 import json
+
+import pygame
 import requests
 
 from core.game_global import Global
@@ -121,3 +123,46 @@ class Button:
             self.status = Button.NORMAL  # 按钮弹起,所以还原成普通状态
             if self.callBackFunc:  # 调用回调函数
                 return self.callBackFunc()
+
+
+class TextView:
+    """
+    绘制文字
+    """
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls)
+        return cls.__instance
+
+    def __init__(self):
+        if not hasattr(self, 'surface_buf'):
+            setattr(self, 'surface_buf', [])  # 设置文字表面缓冲区
+
+    def draw_text(self, dest_sur, x, y, text, font, rgb=(0, 0, 0)):
+        """
+        绘制文字
+        """
+
+        # 判断文字是否在缓冲区中
+        surface = None
+        for buf in self.surface_buf:
+            if buf['text'] == text and buf['rgb'] == rgb:
+                surface = buf['surface']
+                # print('从缓冲区绘制')
+                # print(text)
+                break
+
+        if surface is None:
+            surface = font.render(text, True, rgb)
+            self.surface_buf.append({'text': text, 'rgb': rgb, 'surface': surface})
+            # print('第一次绘制')
+
+        dest_sur.blit(surface, (x, y))
+
+    def clear_buf(self):
+        """
+        清空缓冲区
+        """
+        self.surface_buf.clear()

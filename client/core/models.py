@@ -22,3 +22,25 @@ class Map:
         # 初始化所有层
         self.bottom = [Array2D(13, 13, 1000) for i in range(self.level)]  # 底层
         self.top = [Array2D(13, 13) for i in range(self.level)]  # 顶层
+
+    def go_next(self):
+        """
+        去下一层（之后一层）
+        """
+        if self.current_level + 1 >= self.level:
+            return False  # 没有下一层了
+
+        self.current_level += 1
+
+        return True
+
+    def go_last(self):
+        """
+        去上一层（之前一层）
+        """
+        if self.current_level - 1 < 0:
+            return False  # 没有上一层了
+
+        self.current_level -= 1
+
+        return True

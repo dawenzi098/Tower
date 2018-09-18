@@ -19,9 +19,10 @@ class Game:
 
         # 初始化全局变量
         g.screen = pygame.display.set_mode([800, 600])
-        g.font = pygame.font.SysFont('fangsong', 24)
         g.scene = 1  # TODO:发布的时候记得改
         g.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # g.font = pygame.font.SysFont('fangsong', 24)
+        g.font = pygame.font.Font(os.path.join(g.base_dir, 'data/font/mh.ttf'),24)
         g.host = 'http://127.0.0.1:8000'
         g.auth = '666666'
         init_surface_pool()  # 加载全部图片（一共也没几张图，占不了多少内存）

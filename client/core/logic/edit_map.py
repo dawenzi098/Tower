@@ -4,7 +4,7 @@
 import pygame
 from pygame import Color
 
-from core.common import Button
+from core.common import Button, TextView
 from core.game_global import Global, BasePanel
 from core.models import Map
 
@@ -185,9 +185,11 @@ monster_panel = MonsterPanel(500, 240, 128, 160)
 # 创建地图面板
 map_panel = MapPanel()
 # 创建上一层按钮
-last_btn = Button(500, 450, "上一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], None, g.font)
+last_btn = Button(500, 450, "上一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], current_map.go_last,
+                  g.font)
 # 创建下一层按钮
-next_btn = Button(650, 450, "下一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], None, g.font)
+next_btn = Button(650, 450, "下一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], current_map.go_next,
+                  g.font)
 
 
 def event_handler(event):
@@ -252,3 +254,5 @@ def draw():
     # 绘制按钮
     last_btn.draw(g.screen)
     next_btn.draw(g.screen)
+    # 绘制当前层数
+    TextView().draw_text(g.screen, 570, 520, "当前层数：%d" % (current_map.current_level + 1), g.font, (0, 255, 255))
