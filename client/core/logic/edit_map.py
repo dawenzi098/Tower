@@ -4,10 +4,11 @@
 import pygame
 from pygame import Color
 
+from core.common import Button
 from core.game_global import Global, BasePanel
 from core.models import Map
 
-g = Global.g()
+g = Global()
 current_tile = 0  # 当前选中的瓦片（图块）
 current_map = Map(3)  # 当前所编辑的地图数据
 
@@ -94,7 +95,7 @@ class MonsterPanel(BasePanel):
     def draw(self):
         # 画图块
         for x in range(4):
-            for y in range(4):
+            for y in range(5):
                 g.screen.blit(g.surface_pool[8], (self.x + x * 32, self.y + y * 32),
                               (x * 96 + int(self.current_frame) * 32, y * 128, 32, 32))
 
@@ -180,9 +181,13 @@ key_panel = Panel(4, 650, 200, 128, 32)
 # 创建传送门面板
 tp_panel = Panel(8, 650, 250, 64, 32)
 # 创建怪物面板
-monster_panel = MonsterPanel(500, 240, 128, 128)
+monster_panel = MonsterPanel(500, 240, 128, 160)
 # 创建地图面板
 map_panel = MapPanel()
+# 创建上一层按钮
+last_btn = Button(500, 450, "上一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], None, g.font)
+# 创建下一层按钮
+next_btn = Button(650, 450, "下一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], None, g.font)
 
 
 def event_handler(event):
@@ -197,6 +202,8 @@ def event_handler(event):
         key_panel.mouse_move(x, y)
         monster_panel.mouse_move(x, y)
         tp_panel.mouse_move(x, y)
+        last_btn.getFocus(x, y)
+        next_btn.getFocus(x, y)
     elif event.type == pygame.MOUSEBUTTONDOWN:  # 鼠标按下
         floor_panel.mouse_down(x, y)
         wall_panel.mouse_down(x, y)
@@ -206,6 +213,11 @@ def event_handler(event):
         key_panel.mouse_down(x, y)
         monster_panel.mouse_down(x, y)
         tp_panel.mouse_down(x, y)
+        last_btn.mouseDown(x, y)
+        next_btn.mouseDown(x, y)
+    elif event.type == pygame.MOUSEBUTTONUP:  # 鼠标弹起
+        last_btn.mouseUp()
+        next_btn.mouseUp()
 
 
 def logic():
@@ -237,3 +249,6 @@ def draw():
     tp_panel.draw()
     # 绘制地图
     map_panel.draw()
+    # 绘制按钮
+    last_btn.draw(g.screen)
+    next_btn.draw(g.screen)

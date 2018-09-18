@@ -55,6 +55,12 @@ def init_surface_pool():
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/ani-atk.png')).convert_alpha())
     # 10:加载传送动画
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/ani-tp.png')).convert_alpha())
+    # 11:加载按钮1
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/btn-1.png')).convert_alpha())
+    # 12:加载按钮2
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/btn-2.png')).convert_alpha())
+    # 13:加载按钮3
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/btn-3.png')).convert_alpha())
 
 
 class Fade:
