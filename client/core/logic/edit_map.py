@@ -191,6 +191,9 @@ last_btn = Button(500, 450, "上一层", g.surface_pool[11], g.surface_pool[12],
 next_btn = Button(650, 450, "下一层", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], current_map.go_next,
                   g.font)
 
+# 创建保存按钮
+save_btn = Button(300, 450, "保存", g.surface_pool[11], g.surface_pool[12], g.surface_pool[13], None, g.font)
+
 
 def event_handler(event):
     """事件处理"""
@@ -206,6 +209,7 @@ def event_handler(event):
         tp_panel.mouse_move(x, y)
         last_btn.getFocus(x, y)
         next_btn.getFocus(x, y)
+        save_btn.getFocus(x, y)
     elif event.type == pygame.MOUSEBUTTONDOWN:  # 鼠标按下
         floor_panel.mouse_down(x, y)
         wall_panel.mouse_down(x, y)
@@ -217,9 +221,11 @@ def event_handler(event):
         tp_panel.mouse_down(x, y)
         last_btn.mouseDown(x, y)
         next_btn.mouseDown(x, y)
+        save_btn.mouseDown(x, y)
     elif event.type == pygame.MOUSEBUTTONUP:  # 鼠标弹起
         last_btn.mouseUp()
         next_btn.mouseUp()
+        save_btn.mouseUp()
 
 
 def logic():
@@ -254,5 +260,6 @@ def draw():
     # 绘制按钮
     last_btn.draw(g.screen)
     next_btn.draw(g.screen)
+    save_btn.draw(g.screen)
     # 绘制当前层数
     TextView().draw_text(g.screen, 570, 520, "当前层数：%d" % (current_map.current_level + 1), g.font, (0, 255, 255))
