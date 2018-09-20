@@ -63,10 +63,11 @@ class TowerPlayer(models.Model):
     玩家在塔中的数据（存档）
     """
     player = models.ForeignKey('Player', null=False, on_delete=models.CASCADE, verbose_name='玩家')
+    tower = models.ForeignKey('Tower', null=False, on_delete=models.CASCADE, verbose_name='塔')
+
     hp = models.PositiveIntegerField(null=False, default=0, verbose_name="生命值加成")
     atk = models.PositiveIntegerField(null=False, default=0, verbose_name="攻击力加成")
     defense = models.PositiveIntegerField(null=False, default=0, verbose_name="防御力加成")
-    tower = models.ForeignKey('Tower', null=False, on_delete=models.CASCADE, verbose_name='塔')
     x = models.PositiveSmallIntegerField(null=False, default=0, verbose_name="横坐标")
     y = models.PositiveSmallIntegerField(null=False, default=0, verbose_name="纵坐标")
     level = models.PositiveSmallIntegerField(null=False, default=1, verbose_name="当前层数")

@@ -166,3 +166,147 @@ class TextView:
         清空缓冲区
         """
         self.surface_buf.clear()
+
+
+class ScrollList:
+    """
+    滚动列表
+    """
+
+    def __init__(self, x, y, w, h, surface_bg, surface_item, padding=(10, 5), spacing=10, callback=None):
+        """
+        构造滚动列表对象
+        :param x: 在窗口中的位置
+        :param y: 在窗口中的位置
+        :param w: 宽度
+        :param h: 高度
+        :param surface_bg: 列表背景图
+        :param surface_item: 列表每行的背景图
+        :param padding: (上下内边距，左右内边距)
+        :param spacing: 行距，第一个item的底部到下一个item的头部的距离
+        :param callback: item被点中后的回调函数
+        """
+
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.surface_bg = surface_bg
+        self.surface_item = surface_item
+        self.padding = padding
+        self.spacing = spacing
+        self.item_list = []  # item列表,格式：{"text":"6666","font":font,"data":data}，其中data是附带数据，可有可无
+        self.callback = callback  # 鼠标触发的单击事件
+        self.item_h = self.surface_item.get_height()
+        # 缓冲区
+        self.surface_buffer = None
+        self.offset_y = 0  # 缓冲区偏移量
+        # 当前偏移量
+        self.current_offset_y = 0
+        # 鼠标是否按下
+        self.is_mouse_down = False
+        # 鼠标按下时的坐标(相对坐标，以滚动列表左上角为原点)
+        self.m_x = 0
+        self.m_y = 0
+
+    def set_buffer(self):
+        """
+        创建缓冲区
+        """
+        # 宽度
+        buffer_width = self.surface_bg.get_width() - self.padding[1] * 2
+        # 高度
+        buffer_height = len(self.item_list) * (self.surface_item.get_height() + self.spacing)
+        # 创建缓冲区
+        self.surface_buffer = pygame.Surface((buffer_width, buffer_height), flags=pygame.SRCALPHA)
+        pygame.Surface.convert(self.surface_buffer)
+        self.surface_buffer.fill(pygame.Color(255, 255, 255, 0))
+
+        # 画列表
+        for i in range(len(self.item_list)):
+            self.surface_buffer.blit(self.surface_item, (0, i * (self.item_h + self.spacing)))
+            TextView().draw_text(self.surface_buffer, 15, 22 + i * (self.item_h + self.spacing),
+                                 self.item_list[i]['text'],
+                                 self.item_list[i]['font'], self.item_list[i]['color'])
+
+    def mouse_move(self, x, y):
+        if not self.is_mouse_down:
+            return
+        # 计算偏移量
+        _, d_y = self.get_dxy(x, y)
+        self.current_offset_y = d_y - self.m_y
+        # 限制拖动范围
+        if self.current_offset_y + self.offset_y >= 0:
+            self.current_offset_y = 0
+            self.offset_y = 0
+            # self.is_mouse_down = False
+
+        if self.current_offset_y + self.offset_y <= self.surface_bg.get_width() - self.surface_buffer.get_height():
+            self.current_offset_y = 0
+            self.offset_y = self.surface_bg.get_width() - self.surface_buffer.get_height()
+
+    def mouse_down(self, x, y):
+        if not self.mouse_in_panel(x, y):
+            return
+        self.is_mouse_down = True
+        # 获取相对坐标
+        self.m_x, self.m_y = self.get_dxy(x, y)
+
+    def mouse_up(self, x, y):
+        d_x, d_y = self.get_dxy(x, y)
+        if d_x == self.m_x and d_y == self.m_y:
+            # 单纯的点击事件，没有拖动
+            try:
+                if self.callback is not None:
+                    index = (-self.offset_y + self.m_y) // (self.item_h + self.spacing)
+                    self.callback(self.item_list[index]['data'])
+            except:  # 下标越界
+                pass
+        else:
+            # 拖动事件
+            self.offset_y += self.current_offset_y
+            self.current_offset_y = 0
+        self.is_mouse_down = False
+
+    def mouse_in_panel(self, x, y):
+        # 计算相对坐标
+        dx, dy = self.get_dxy(x, y)
+
+        return 0 < dx < self.w and 0 < dy < self.h
+
+    def get_dxy(self, x, y):
+        # 计算相对坐标
+        dx = x - self.x
+        dy = y - self.y
+        return dx, dy
+
+    def add_item(self, font, text="", color=(233, 115, 115), data=None):
+        """
+        添加行
+        :param font: 字体
+        :param text: 显示的文字
+        :param color: 文字颜色
+        :param data: 附带数据
+        """
+        item = {
+            "text": text,
+            "font": font,
+            "color": color,
+            "data": data
+        }
+        self.item_list.append(item)
+        self.set_buffer()
+
+    def clear_item(self):
+        """
+        清空列表
+        """
+        self.item_list = []
+
+    def draw(self, dest_suf):
+        # 画背景图
+        dest_suf.blit(self.surface_bg, (self.x, self.y))
+        # 画item
+        dest_suf.blit(self.surface_buffer, (self.x + self.padding[1], self.y + self.padding[0]),
+                      (0, -(self.current_offset_y + self.offset_y), self.surface_buffer.get_width(),
+                       self.surface_bg.get_height() - self.padding[0] * 2))

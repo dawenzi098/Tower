@@ -10,7 +10,8 @@ from core.models import Map
 
 g = Global()
 current_tile = 0  # 当前选中的瓦片（图块）
-current_map = Map(3)  # 当前所编辑的地图数据
+current_map = Map(1)  # 当前所编辑的地图数据
+action = None  # 动作（当进入这个场景时，可将参数传入这里）
 
 
 class Panel(BasePanel):

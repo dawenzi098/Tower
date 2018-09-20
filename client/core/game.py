@@ -19,15 +19,16 @@ class Game:
 
         # 初始化全局变量
         g.screen = pygame.display.set_mode([800, 600])
-        g.scene = 1  # TODO:发布的时候记得改
+        g.scene = 2  # TODO:发布的时候记得改
         g.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # g.font = pygame.font.SysFont('fangsong', 24)
-        g.font = pygame.font.Font(os.path.join(g.base_dir, 'data/font/mh.ttf'),24)
+        g.font = pygame.font.Font(os.path.join(g.base_dir, 'data/font/mh.ttf'), 24)
+        g.min_font = pygame.font.Font(os.path.join(g.base_dir, 'data/font/mh.ttf'), 18)
+        g.min_font.set_bold(True)
         g.host = 'http://127.0.0.1:8000'
         g.auth = '666666'
         init_surface_pool()  # 加载全部图片（一共也没几张图，占不了多少内存）
         g.fade = Fade()
-
         # 初始化随机种子
         random.seed(int(time.time()))
 
@@ -54,24 +55,30 @@ class Game:
         # 事件处理
         self.handler_event()
 
-        Global.g().fade.logic()  # 淡入淡出
+        Global().fade.logic()  # 淡入淡出
         # 场景逻辑
-        if Global.g().scene == 0:  # 登录场景
+        if Global().scene == 0:  # 登录场景
             start_logic()
-        elif Global.g().scene == 1:
+        elif Global().scene == 1:  # 地图编辑器
             from core.logic import edit_map
             edit_map.logic()
+        elif Global().scene == 2:  # 游戏大厅
+            from core.logic import game_room
+            game_room.logic()
 
     def update_view(self):
         """
         游戏视图更新
         """
 
-        if Global.g().scene == 1:
+        if Global().scene == 1:
             from core.logic import edit_map
             edit_map.draw()
+        elif Global().scene == 2:
+            from core.logic import game_room
+            game_room.draw()
 
-        Global.g().fade.draw()  # 淡入淡出
+        Global().fade.draw()  # 淡入淡出
 
         pygame.display.flip()
 
@@ -83,10 +90,11 @@ class Game:
             if event.type == pygame.QUIT:
                 sys.exit()
             # 事件分发
-            if Global.g().scene == 1:
+            if Global().scene == 1:
                 from core.logic import edit_map
                 edit_map.event_handler(event)
-            elif Global.g().scene == 2:
-                pass
-            elif Global.g().scene == 3:
+            elif Global().scene == 2:
+                from core.logic import game_room
+                game_room.event_handler(event)
+            elif Global().scene == 3:
                 pass

@@ -36,7 +36,8 @@ def start_logic():
                                   atk=py_obj['player']['atk'], defense=py_obj['player']['atk'],
                                   coin=py_obj['player']['coin'])
                 # 进入游戏
-                Global.g().scene = 1
+                Global().scene = 2
+                print("登录成功！")
                 # Global.g().fade.reset()
                 # Global.g().fade.sw = True
                 break

@@ -61,6 +61,12 @@ def init_surface_pool():
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/btn-2.png')).convert_alpha())
     # 13:加载按钮3
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/btn-3.png')).convert_alpha())
+    # 14:加载游戏大厅背景图
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/room_bg.jpg')))
+    # 15:加载大厅滚动列表背景图
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/scroll-bg.png')).convert_alpha())
+    # 16:加载大厅滚动列表每行背景图
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/scroll-item.png')).convert_alpha())
 
 
 class Fade:
@@ -74,7 +80,7 @@ class Fade:
         self.state = 0  # 当前状态
         self.speed = 10
         self.alpha = 0
-        self.surface = Global.g().surface_pool[1]
+        self.surface = Global().surface_pool[1]
         self.surface.set_alpha(self.alpha)
 
     def logic(self):
