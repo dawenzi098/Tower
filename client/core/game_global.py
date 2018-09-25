@@ -67,7 +67,8 @@ def init_surface_pool():
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/scroll-bg.png')).convert_alpha())
     # 16:加载大厅滚动列表每行背景图
     g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/scroll-item.png')).convert_alpha())
-
+    # 17:加载消息条背景图
+    g.surface_pool.append(pygame.image.load(os.path.join(g.base_dir, 'data/image/msg_bar.png')).convert_alpha())
 
 class Fade:
     """

@@ -2,8 +2,9 @@ import os
 import random
 import sys
 import time
-
 import pygame
+import win32gui
+import win32api
 
 from core.logic.start import start_logic
 from .game_global import Global, init_surface_pool, Fade
@@ -19,6 +20,7 @@ class Game:
 
         # 初始化全局变量
         g.screen = pygame.display.set_mode([800, 600])
+        g.hwnd = win32gui.FindWindow(None, "魔塔Online")  # 获取窗口句柄
         g.scene = 2  # TODO:发布的时候记得改
         g.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # g.font = pygame.font.SysFont('fangsong', 24)

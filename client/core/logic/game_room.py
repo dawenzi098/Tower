@@ -37,3 +37,9 @@ def event_handler(event):
         map_list.mouse_down(x, y)
     elif event.type == pygame.MOUSEBUTTONUP:  # 鼠标弹起
         map_list.mouse_up(x, y)
+
+
+def init_scene():
+    """
+    初始化场景
+    """
